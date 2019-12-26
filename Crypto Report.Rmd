@@ -1,0 +1,58 @@
+---
+title: "Crypto Report"
+author: "Matt Majestic"
+date: "July 7, 2019"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  pdf_document:
+    fig_caption: yes
+    fig_height: 3.5
+    fig_width: 4
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+library(crypto)
+setwd('C:/Users/Matt/Desktop/R_Stuff')
+am_i_rich_now <- crypto_prices()
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(DT)
+current_market_table <-datatable(am_i_rich_now[,c('rank','name','price_usd','24h_volume_usd')]) %>% formatCurrency(c('price_usd','24h_volume_usd'),currency = '$',digits = 2)
+current_crypto_scatter <- plot_ly(am_i_rich_now,x=~price_usd,y=~available_supply,color =~name, shape =~name, mode = "markers") 
+#+ geom_point() + xlab('Price in USD') + ylab('Supply Available') + #ggtitle('CurrentCryptocurrency Data'))
+```
+\newpage
+# Introduction
+
+Look at Crypto Trends 
+
+# Methods
+
+Data Sources
+
+* Current Crypto Data (Webscraped via R Crypto Package)
+
+
+# Results 
+
+* Extremely volatile
+* Do not invest
+
+```{r,echo = FALSE,warning=FALSE}
+current_crypto_scatter
+```
+
+```{r,echo=FALSE}
+current_market_table
+```
+
+# Follow Ups
+
+* *Where are spots for data cleaning?*
+* *Any other cuts you would like to see'*
+
