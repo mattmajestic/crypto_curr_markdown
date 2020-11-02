@@ -19,9 +19,10 @@ library(ggplot2)
 library(plotly)
 library(dplyr)
 library(DT)
+library(lubridate)
 source("api_key/api_coinmarket.R")
 coinmarketcapr::setup(api_key = api_sourced_key)
-coinmarketcapr::get_api_info()
+#coinmarketcapr::get_api_info()
 ```
 \newpage
 # Introduction
@@ -40,16 +41,21 @@ Data Sources
 * Extremely volatile
 
 ```{r build,echo = FALSE,warning=FALSE}
-all_coins <- get_marketcap_ticker_all()
-current_market_table <-datatable(all_coins,rownames = FALSE)
+all_coins <- get_crypto_listings() %>% mutate(year = year(date_added))
+annual_mean_usd_data <- all_coins %>% dplyr::group_by(year) %>% summarise(mean_usd = mean(USD_price)) %>% as.data.frame()
+annual_mean_usd_dt <-datatable(all_coins %>% dplyr::group_by(year) %>% summarise(mean_usd = mean(USD_price)),rownames = FALSE)
+annual_mean_usd_dt
 ```
 
 ```{r visual,echo=FALSE}
-current_market_table
+plot_ly(annual_mean_usd_data,
+        x=~year,
+        y=~mean_usd, 
+        type = 'scatter', 
+        mode = 'lines')
 ```
 
-# Follow Ups
+# Conclusion
 
-* *Where are spots for data cleaning?*
-* *Any other cuts you would like to see'*
+* *On the rise the past 2 years based on mean USD_price*
 
