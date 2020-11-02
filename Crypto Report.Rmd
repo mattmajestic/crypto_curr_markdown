@@ -1,7 +1,6 @@
 ---
 title: "Crypto Report"
 author: "Matt Majestic"
-date: "July 7, 2019"
 output:
   html_document:
     df_print: paged
@@ -15,39 +14,37 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-library(crypto)
-setwd('C:/Users/Matt/Desktop/R_Stuff')
-am_i_rich_now <- crypto_prices()
+library(coinmarketcapr)
 library(ggplot2)
 library(plotly)
 library(dplyr)
 library(DT)
-current_market_table <-datatable(am_i_rich_now[,c('rank','name','price_usd','24h_volume_usd')]) %>% formatCurrency(c('price_usd','24h_volume_usd'),currency = '$',digits = 2)
-current_crypto_scatter <- plot_ly(am_i_rich_now,x=~price_usd,y=~available_supply,color =~name, shape =~name, mode = "markers") 
-#+ geom_point() + xlab('Price in USD') + ylab('Supply Available') + #ggtitle('CurrentCryptocurrency Data'))
+source("api_key/api_coinmarket.R")
+coinmarketcapr::setup(api_key = api_sourced_key)
+coinmarketcapr::get_api_info()
 ```
 \newpage
 # Introduction
 
-Look at Crypto Trends 
+Goal: Look at Crypto Trends & Identify Patterns in Data
 
 # Methods
 
 Data Sources
 
-* Current Crypto Data (Webscraped via R Crypto Package)
+* Coin Market Cap Web API
 
 
 # Results 
 
 * Extremely volatile
-* Do not invest
 
-```{r,echo = FALSE,warning=FALSE}
-current_crypto_scatter
+```{r build,echo = FALSE,warning=FALSE}
+all_coins <- get_marketcap_ticker_all()
+current_market_table <-datatable(all_coins,rownames = FALSE)
 ```
 
-```{r,echo=FALSE}
+```{r visual,echo=FALSE}
 current_market_table
 ```
 
